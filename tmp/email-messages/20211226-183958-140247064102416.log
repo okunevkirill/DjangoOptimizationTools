@@ -1,0 +1,12 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Account Verifications user
+From: webmaster@localhost
+To: user@mail.loc
+Date: Sun, 26 Dec 2021 15:39:58 -0000
+Message-ID: <164053319880.24027.12662524534543939529@home>
+
+Для подтверждения учетной записи user на портале http://localhost:8000перейдите по ссылке 
+ http://localhost:8000/users/verify/user@mail.loc/7490a959fb9c8c71bc4cff54ba12ef2d92f3395e/
+-------------------------------------------------------------------------------
