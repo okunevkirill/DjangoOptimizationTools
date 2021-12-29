@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include('mainapp.urls', namespace='mainapp')),
 
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

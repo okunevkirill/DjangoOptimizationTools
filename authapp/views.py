@@ -3,11 +3,11 @@ from django.contrib import messages, auth
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
-from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
+from authapp.forms import UserLoginForm, UserRegisterForm, UserEditForm, UserProfileEditForm
 from authapp.models import User
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 
@@ -61,7 +61,7 @@ class RegisterListView(FormView, BaseClassContextMixin):
                 user.activation_key_expires = None
                 user.is_active = True
                 user.save()
-                auth.login(self, user)
+                auth.login(self, user, backend='django.contrib.auth.backends.ModelBackend')
             return render(self, 'authapp/verification.html')
         except Exception as err:
             print(f'Error activation user : {err.args}')
@@ -70,21 +70,26 @@ class RegisterListView(FormView, BaseClassContextMixin):
 
 class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     template_name = 'authapp/profile.html'
-    form_class = UserProfilerForm
+    form_class = UserEditForm
     success_url = reverse_lazy('authapp:profile')
     title = 'GeekShop - Профиль'
 
-    def form_valid(self, form):
-        messages.set_level(self.request, messages.INFO)
-        messages.info(self.request, "Информация о пользователе изменена.")
-        super().form_valid(form)
-        return HttpResponseRedirect(self.get_success_url())
+    def post(self, request, *args, **kwargs):
+        form = UserEditForm(data=request.POST, files=request.FILES, instance=request.user)
+        profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
+            messages.set_level(self.request, messages.INFO)
+            messages.info(self.request, "Информация о пользователе изменена.")
+            form.save()
+            # profile_form.save()
+        return redirect(self.success_url)
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(User, pk=self.request.user.pk)
 
     def get_context_data(self, **kwargs):
         context = super(ProfileFormView, self).get_context_data(**kwargs)
+        context['profile_form'] = UserProfileEditForm(instance=self.request.user.userprofile)
         return context
 
 

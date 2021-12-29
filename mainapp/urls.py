@@ -8,6 +8,7 @@ urlpatterns = [
     re_path(r'^$', mainapp.MainIndexTemplateView.as_view(), name='index'),
 
     re_path(r'^products/$', mainapp.products, name='products'),
+    # re_path(r'^products/category/(?P<id_category>\d+)/$', mainapp.MainProductsList.as_view(), name='category'),
     re_path(r'^products/category/(?P<id_category>\d+)/$', mainapp.products, name='category'),
     re_path(r'^products/category/(?P<id_category>\d+)/(?P<page>\d+)/$', mainapp.products, name='page'),
 
