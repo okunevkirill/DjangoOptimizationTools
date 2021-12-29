@@ -1,0 +1,14 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: 
+ =?utf-8?b?0J/QvtC00YLQstC10YDQttC00LXQvdC40Y8g0YPRh9C10YLQvdC+0Lkg0LfQsNC/?=
+ =?utf-8?b?0LjRgdC4IHRlc3Q=?=
+From: django@geekshop.local
+To: test@gmail.local
+Date: Sun, 26 Dec 2021 13:49:22 -0000
+Message-ID: <164052656202.18131.3246430344801330235@home>
+
+Для подтверждения учетной записи test на портале http://localhost:8000перейдите по ссылке 
+ http://localhost:8000/users/verify/test@gmail.local/b584787354fcf90a6de63cd25acb9e6f306548bf/
+-------------------------------------------------------------------------------
