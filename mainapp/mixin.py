@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View, ContextMixin
+from django import forms
 
 
 class AdministratorAccessOnlyMixin(UserPassesTestMixin):
@@ -32,3 +33,12 @@ class UserDispatchMixin(View):
     @method_decorator(user_passes_test(lambda u: u.is_authenticated))
     def dispatch(self, request, *args, **kwargs):
         return super(UserDispatchMixin, self).dispatch(request, *args, **kwargs)
+
+
+# -------------------------------------------------------------------------------
+# Mixin for Form
+class CssFormattingMixin(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

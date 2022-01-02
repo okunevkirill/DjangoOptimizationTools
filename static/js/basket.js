@@ -9,7 +9,7 @@ window.onload = function () {
                 },
             });
         event.preventDefault()
-    })
+    });
 
     $('.card_add_basket').on('click', 'button[type="button"]', function () {
         let t_href = event.target.value

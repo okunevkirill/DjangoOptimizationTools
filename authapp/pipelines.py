@@ -40,11 +40,12 @@ def _save_user_vk(user, response, *args, **kwargs):
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')
     # ----------------------------------------
     if data['photo_200']:
-        image = requests.get(data['photo_200']).content
-        file_name = f'avatar_{user.username}.jpg'
-        with open(f'{MEDIA_ROOT}{os.sep}{file_name}', 'wb') as f:
-            f.write(image)
-        user.image = file_name
+        response_url_image = requests.get(data['photo_200'])
+        if response_url_image.status_code == 200:
+            file_name = f'avatar_{user.username}.jpg'
+            with open(f'{MEDIA_ROOT}{os.sep}{file_name}', 'wb') as f:
+                f.write(response_url_image.content)
+            user.image = file_name
     # ----------------------------------------
     if data['personal'].get('langs'):
         user.userprofile.langs = ', '.join(data['personal'].get('langs'))

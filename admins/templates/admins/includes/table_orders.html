@@ -1,0 +1,56 @@
+<div class="table-responsive orders_list">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Пользователь</th>
+            <th>Создано</th>
+            <th>Обновлено</th>
+            <th>Статус</th>
+            <th>Активный</th>
+            <th>Стоимость</th>
+            <th>Изменить</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for order in object_list %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.username }}</td>
+                <td>{{ order.created }}</td>
+                <td>{{ order.updated }}</td>
+                <td>
+                    <select class="form-select form-select-lg mb-3"
+                            name="{{ order.id }}"
+                            aria-label=".form-select-lg example">
+                        <option selected type="order">{{ order.get_status_display|upper }}</option>
+                        {% for code, item in order.ORDER_STATUS_CHOICES %}
+                            {% if code != order.status %}
+                                <option value="{{ code }}">{{ item|upper }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                <td class="text-center">
+                    {% if order.is_active %}
+                        <i class="fas fa-check-circle"></i>
+                    {% else %}
+                        <i class="fas fa-times-circle"></i>
+                    {% endif %}
+                </td>
+                <td>{{ order.get_total_cost }}</td>
+                <td>
+                    <form action="{% url 'admins:order_delete' order.id %}" method="post">
+                        {% csrf_token %}
+                        {% if order.is_active %}
+                            <input class="btn btn-danger btn-block" type="submit" value="Удалить">
+                        {% else %}
+                            <input class="btn btn-info btn-block" type="submit" value="Восстановить">
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
