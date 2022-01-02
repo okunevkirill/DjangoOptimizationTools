@@ -1,0 +1,12 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Account Verifications test1
+From: webmaster@localhost
+To: test1@mail.com
+Date: Wed, 29 Dec 2021 18:42:41 -0000
+Message-ID: <164080336188.45460.7781443641929424895@home>
+
+Для подтверждения учетной записи test1 на портале http://localhost:8000 перейдите по ссылке 
+ http://localhost:8000/users/verify/test1@mail.com/fefd3edd524d9affd3222212c3715b92a8d8ed0b/
+-------------------------------------------------------------------------------

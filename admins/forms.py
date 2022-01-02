@@ -1,6 +1,6 @@
 from django import forms
 
-from authapp.forms import UserRegisterForm, UserProfilerForm
+from authapp.forms import UserRegisterForm, UserEditForm
 from authapp.models import User
 from mainapp.models import ProductCategory, Product
 
@@ -23,7 +23,7 @@ class UserAdminRegisterForm(UserRegisterForm):
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
 
-class UserAdminProfileForm(UserProfilerForm):
+class UserAdminProfileForm(UserEditForm):
     email = forms.EmailField(widget=forms.EmailInput())
     username = forms.CharField(widget=forms.TextInput())
 

@@ -46,12 +46,20 @@ def products(request, id_category='0', page=1):  # ToDO Ok_kir - Передел�
 #     paginate_by = 3
 #
 #     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['title'] = 'Geekshop'
-#         context['current_category'] = self.kwargs.get('id_category', '0')
+#         context = super(MainProductsList, self).get_context_data(**kwargs)
+#         id_category = self.kwargs.get('id_category', '0')
+#         context['title'] = 'Geekshop | Каталог'
+#         context['current_category'] = 'все' if id_category == '0' else ProductCategory.objects.filter(id=id_category)
 #         context['categories'] = ProductCategory.objects.filter(is_active=True)
 #         return context
 #
+#     def get_queryset(self):
+#         id_category = self.kwargs.get('id_category', '0')
+#         if id_category != '0':
+#             return Product.objects.filter(
+#                 is_active=True, category__is_active=True).filter(category_id=id_category).order_by('id')
+#         return Product.objects.filter(is_active=True, category__is_active=True).order_by('id')
+
 
 class ProductDetails(BaseClassContextMixin, DetailView):
     """Product information controller"""

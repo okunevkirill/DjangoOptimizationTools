@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django import forms
 from django.core import validators
 
-from authapp.models import User
+from authapp.models import User, UserProfile
 
 
 class UserLoginForm(AuthenticationForm):
@@ -61,7 +61,11 @@ class UserRegisterForm(UserCreationForm):
         return user
 
 
-class UserProfilerForm(UserChangeForm):
+class UserEditForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'image', 'age')
+
     username = forms.CharField(
         widget=forms.TextInput(),
         validators=[validators.RegexValidator(regex='^[a-zA-Z][a-zA-Z0-9_-]{3,}$')],
@@ -69,19 +73,30 @@ class UserProfilerForm(UserChangeForm):
             'invalid': 'Никнейм должен начинаться с буквы, состоять из латинских букв и цифр и быть длиной от 4 символов'
         },
     )
-
     image = forms.ImageField(widget=forms.FileInput(), required=False)
     age = forms.IntegerField(widget=forms.NumberInput(), required=False)
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'image', 'age')
-
     def __init__(self, *args, **kwargs):
-        super(UserProfilerForm, self).__init__(*args, **kwargs)
+        super(UserEditForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = True
         self.fields['email'].widget.attrs['readonly'] = True
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class UserProfileEditForm(forms.ModelForm):
+    """Form-superstructure over form for User"""
+
+    class Meta:
+        model = UserProfile
+        exclude = ('user',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != 'sex':
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'
