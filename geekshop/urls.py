@@ -8,9 +8,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('authapp.urls', namespace='authapp')),
-    path('baskets/', include('baskets.urls', namespace='baskets')),
     path('admins/', include('admins.urls', namespace='admins')),
+    path('baskets/', include('baskets.urls', namespace='baskets')),
+    path('orders/', include('ordersapp.urls', namespace='orders')),
+    path('users/', include('authapp.urls', namespace='authapp')),
+
     path('', include('mainapp.urls', namespace='mainapp')),
 
     url(r'^i18n/', include('django.conf.urls.i18n')),

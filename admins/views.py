@@ -1,4 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, DeleteView, CreateView, TemplateView
 
@@ -6,8 +9,10 @@ from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUp
 from authapp.models import User
 from mainapp.mixin import BaseClassContextMixin, AdministratorAccessOnlyMixin, StaffAccessOnlyMixin
 from mainapp.models import Product, ProductCategory
+from ordersapp.models import Order
 
 
+# -------------------------------------------------------------------------------
 class IndexTemplateView(StaffAccessOnlyMixin, TemplateView):
     template_name = 'admins/admin.html'
 
@@ -123,3 +128,38 @@ class ProductsDeleteView(StaffAccessOnlyMixin, DeleteView):
         self.object.is_active = False if self.object.is_active else True
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+# -------------------------------------------------------------------------------
+class OrderAdminListView(AdministratorAccessOnlyMixin, BaseClassContextMixin, ListView):
+    model = Order
+    template_name = 'admins/admin-order_list.html'
+    title = 'Админка | Список заказов'
+
+
+class OrderAdminDeleteView(AdministratorAccessOnlyMixin, DeleteView):
+    model = Order
+    success_url = reverse_lazy('admins:orders')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False if self.object.is_active else True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def order_edit(request, id_order, status):
+    if request.is_ajax():
+        order = get_object_or_404(Order, id=id_order)
+        if status != Order.CANCEL:
+            order.status = status
+            order.save()
+        else:
+            order.delete()
+
+        orders = Order.objects.all()
+        context = {'object_list': orders}
+        result = render_to_string('admins/includes/table_orders.html', context)
+        test = JsonResponse({'result': result})
+        return test

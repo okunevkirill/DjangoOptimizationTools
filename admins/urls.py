@@ -25,4 +25,8 @@ urlpatterns = [
     re_path(r'^products-delete/(?P<pk>\d+)/$', admins.ProductsDeleteView.as_view(), name='admins_product_delete'),
 
     re_path(r'^lang/$', set_language, name='set_language'),
+
+    re_path(r'^orders/$', admins.OrderAdminListView.as_view(), name='orders'),
+    re_path(r'^orders/edit/(?P<id_order>\d+)/(?P<status>\w)/$', admins.order_edit, name='order_edit'),
+    re_path(r'^orders/(?P<pk>\d+)/delete/$', admins.OrderAdminDeleteView.as_view(), name='order_delete'),
 ]

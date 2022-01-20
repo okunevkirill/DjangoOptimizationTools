@@ -11,6 +11,12 @@
                             </div>
                             {% translate 'Users' %}
                         </a>
+                        <a class="nav-link" href="{% url 'admins:orders' %}">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-dolly"></i>
+                            </div>
+                            Заказы
+                        </a>
                         {% endif %}
                     <a class="nav-link" href="{% url 'admins:admin_category' %}">
                         <div class="sb-nav-link-icon">

@@ -6,4 +6,17 @@ window.onload = function () {
         $('#language_site').trigger('click');
         lang.type = "hidden";
     });
+
+    $('.orders_list').on('change', 'select', function (event) {
+        let item = event.target
+        $.ajax(
+            {
+                url: "/admins/orders/edit/" + item.name + "/" + item.value + "/",
+                data: 'csrfmiddlewaretoken={{csrf_token}}',
+                success: function (data) {
+                    $('.orders_list').html(data.result)
+                },
+            });
+        event.preventDefault();
+    });
 }
