@@ -1,0 +1,25 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <h1 class="mt-4">
+                Уверены, что хотите полностью удалить пользователя &laquo;{{ object.username }}&raquo;?
+            </h1>
+        </div>
+    </main>
+    <h2 style="margin: 30px;">
+        <span style="color: red;">Будде внимательны пользователь и все связанные с ним объекты будут полностью удалены из базы данных.</span>
+    </h2>
+    <div class="form-row" style="justify-content: space-evenly;">
+        <form method="post">
+            {% csrf_token %}
+            <input class="btn btn-info" type="submit" value="Удалить">
+        </form>
+        <a href="{% url 'adminapp:user_update' object.id %}" class="btn btn-success">
+            Отмена
+        </a>
+    </div>
+
+{% endblock content %}

@@ -1,7 +1,5 @@
 /.idea
 db.sqlite3
-../venv
+/venv/
 __pycache__/
-
-# API KEY
-!/.env
+*.env
