@@ -1,0 +1,28 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Приложения</div>
+                {% if request.user.is_superuser %}
+                    <a class="nav-link" href="{% url 'adminapp:users' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Пользователи
+                    </a>
+                    <a class="nav-link" href="{% url 'adminapp:orders' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-dolly"></i></div>
+                        Заказы
+                    </a>
+                {% endif %}
+                <a class="nav-link" href="{% url 'adminapp:categories' %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
+                    Категории
+                </a>
+                <a class="nav-link" href="{% url 'adminapp:products' %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tshirt"></i></div>
+                    Продукты
+                </a>
+            </div>
+        </div>
+        <div class="sb-sidenav-footer"></div>
+    </nav>
+</div>

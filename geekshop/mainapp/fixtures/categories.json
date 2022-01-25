@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Одежда",
+    "slug": "odezhda",
+    "description": "Описание для класса одежды"
+  },
+  {
+    "name": "Аксесуары",
+    "slug": "aksesuary",
+    "description": "Описание для класса аксесуары"
+  },
+  {
+    "name": "Обувь",
+    "slug": "obuv",
+    "description": ""
+  },
+  {
+    "name": "Подарки",
+    "slug": "podarki",
+    "description": ""
+  }
+]
+
