@@ -36,3 +36,7 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('mainapp:product_info', kwargs={'pk': self.pk})
+
+    @staticmethod
+    def get_items():
+        return Product.objects.filter(is_active=True).order_by('category', 'name')
