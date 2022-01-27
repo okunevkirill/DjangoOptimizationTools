@@ -33,8 +33,9 @@ function parseOrderForm() {
  */
 function orderSummaryUpdate(orderItemPrice, deltaQuantity) {
     let deltaCost = orderItemPrice * deltaQuantity;
-    orderTotalCost = Number(orderTotalCost + deltaCost);
-    orderTotalQuantity = orderTotalQuantity + deltaQuantity;
+    orderTotalCost = Number(orderTotalCost + deltaCost) || 0;
+
+    orderTotalQuantity = (orderTotalQuantity + deltaQuantity) || 0;
 
     $orderTotalQuantityDOM.html(`${orderTotalQuantity}`);
     $orderTotalCostDOM.html(`${orderTotalCost.toFixed(2)}`);
@@ -79,10 +80,10 @@ function deleteOrderItem(row) {
     let targetName = row[0].querySelector('input[type="number"]').name
     orderItemNum = parseInt(targetName.replace('orderitems-', '').replace('-quantity', ''));
     deltaQuantity = -quantityArr[orderItemNum]
-    orderSummaryUpdate(priceArr[orderItemNum], deltaQuantity)
-
-    delete(quantityArr[orderItemNum]);
-    delete(priceArr[orderItemNum]);
+    quantityArr[orderItemNum] = 0;
+    if (!isNaN(priceArr[orderItemNum]) && !isNaN(deltaQuantity)) {
+        orderSummaryUpdate(priceArr[orderItemNum], deltaQuantity);
+    }
 }
 
 
@@ -102,7 +103,7 @@ function changeProduct(event) {
                     if (!data.productPrice)
                         throw new ValidationError(`Ошибка запроса ${data.error}`);
 
-                    orderItemNum = parseInt(event.target.name.replace('orderitems-', '').replace('-product'));
+                    orderItemNum = parseInt(event.target.name.replace('orderitems-', '').replace('-product')) || 0;
                     let itemPrice = itemTrParent.querySelector(`.td3`);
 
                     itemPrice.innerHTML = `<span class="orderitems-${orderItemNum}-price">${data.productPrice} руб </span>`;
