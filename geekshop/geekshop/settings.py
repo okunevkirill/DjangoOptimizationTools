@@ -157,19 +157,20 @@ LOGIN_ERROR_URL = '/'
 
 # -------------------------------------------------------------------------------
 # Email send settings
-DOMAIN_NAME = 'http://localhost:8000'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '25'
+DOMAIN_NAME = 'https://ok-kir.ru'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 25
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
+EMAIL_USE_TLS = True
 
 # Для отладки с python3 -m smtpd -n -c DebuggingServer localhost:25
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 # Для логирования сообщений почты в виде файлов вместо отправки
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = 'tmp/email-messages/'  # [!] Путь относительный
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = 'tmp/email-messages/'  # [!] Путь относительный
 # -------------------------------------------------------------------------------
 # Social auth
 AUTHENTICATION_BACKENDS = (
