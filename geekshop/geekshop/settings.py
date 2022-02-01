@@ -157,7 +157,7 @@ LOGIN_ERROR_URL = '/'
 
 # -------------------------------------------------------------------------------
 # Email send settings
-DOMAIN_NAME = 'https://ok-kir.ru'
+DOMAIN_NAME = 'ok-kir.ru'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
