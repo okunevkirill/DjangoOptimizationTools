@@ -50,6 +50,13 @@ def _save_user_vk(user, response, *args, **kwargs):
     user.save()
 
 
+def _save_user_google(user, response, *args, **kwargs):
+    pass
+
+
 def save_user_profile(backend, user, response, *args, **kwargs):
     if backend.name == 'vk-oauth2':
         _save_user_vk(user, response, *args, **kwargs)
+        return
+    if backend.name == "google-oauth2":
+        pass
