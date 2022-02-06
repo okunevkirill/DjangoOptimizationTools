@@ -1,7 +1,7 @@
 import re
 
 from django import forms
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.views.generic import DeleteView
 from django.views.generic.base import ContextMixin
@@ -37,6 +37,16 @@ class StaffAccessOnlyMixin(UserPassesTestMixin):
         return self.request.user.is_superuser or self.request.user.is_staff
 
 
+class SelfOrderAccessOnlyMixin(LoginRequiredMixin):  # ToDO - переделать логику работы с заказами
+    def dispatch(self, request, *args, **kwargs):
+        id_order = kwargs.get('pk')
+        orders_user = request.user.order.filter(is_active=True)
+        if id_order and orders_user:
+            if not orders_user.filter(pk=id_order):
+                return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+
 # -------------------------------------------------------------------------------
 class CssFormMixin:
     SPECIAL_FIELDS = {
@@ -67,7 +77,7 @@ class ValidatorUserFormMixin(forms.ModelForm):
 # -------------------------------------------------------------------------------
 class SpecializedRemovalDeleteViewMixin(DeleteView):
     def __init__(self, *args, **kwargs):
-        self.object = None  # [*] Необязательное действие - для избегания варнинга в IDE
+        self.object = None  # [*] Необязательное действие - для избегания предупреждения в IDE
         super().__init__(*args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
