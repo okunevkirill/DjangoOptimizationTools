@@ -1,7 +1,7 @@
 import re
 
 from django import forms
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 from django.http import HttpResponseRedirect
 from django.views.generic import DeleteView
 from django.views.generic.base import ContextMixin
@@ -37,10 +37,14 @@ class StaffAccessOnlyMixin(UserPassesTestMixin):
         return self.request.user.is_superuser or self.request.user.is_staff
 
 
-class SelfOrderAccessOnlyMixin(LoginRequiredMixin):  # ToDO - переделать логику работы с заказами
+class SelfOrderAccessOnlyMixin(AccessMixin):  # ToDO - переделать логику работы с заказами
     def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return self.handle_no_permission()
+
         id_order = kwargs.get('pk')
-        orders_user = request.user.order.filter(is_active=True)
+        orders_user = user.order.filter(is_active=True)
         if id_order and orders_user:
             if not orders_user.filter(pk=id_order):
                 return self.handle_no_permission()

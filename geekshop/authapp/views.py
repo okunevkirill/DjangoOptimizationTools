@@ -29,6 +29,11 @@ class UserRegister(TitleContextMixin, FormView):
     title = 'GeekShop | Регистрация'
     success_url = reverse_lazy('auth:login')
 
+    def dispatch(self, request, *args, **kwargs):   # ToDo - Модернизировать защиту
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('mainapp:index'))
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
