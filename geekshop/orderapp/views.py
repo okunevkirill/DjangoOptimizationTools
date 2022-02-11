@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from mainapp.mixins import TitleContextMixin
+from mainapp.mixins import TitleContextMixin, SelfOrderAccessOnlyMixin
 from mainapp.models import Product
 from orderapp.forms import OrderForm, OrderItemForm
 from orderapp.models import Order, OrderItem
@@ -65,13 +65,13 @@ class OrderCreateView(LoginRequiredMixin, TitleContextMixin, CreateView):
         return super().form_valid(form)
 
 
-class OrderDetailView(LoginRequiredMixin, TitleContextMixin, DetailView):
+class OrderDetailView(SelfOrderAccessOnlyMixin, TitleContextMixin, DetailView):
     """Контроллер с информацией о заказе"""
     model = Order
     title = 'Geekshop | Просмотр заказа'
 
 
-class OrderUpdateView(LoginRequiredMixin, TitleContextMixin, UpdateView):
+class OrderUpdateView(SelfOrderAccessOnlyMixin, TitleContextMixin, UpdateView):
     model = Order
     form_class = OrderForm
     success_url = reverse_lazy('orderapp:list')
@@ -105,7 +105,7 @@ class OrderUpdateView(LoginRequiredMixin, TitleContextMixin, UpdateView):
         return super().form_valid(form)
 
 
-class OrderDeleteView(LoginRequiredMixin, TitleContextMixin, DeleteView):
+class OrderDeleteView(SelfOrderAccessOnlyMixin, TitleContextMixin, DeleteView):
     """Контроллер удаления неоформленного заказа"""
     model = Order
     success_url = reverse_lazy('orderapp:list')
