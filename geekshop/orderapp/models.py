@@ -1,5 +1,6 @@
 import django.contrib.auth
 from django.db import models
+# from django.utils.functional import cached_property
 
 from mainapp.mixins import ProductQuantityMixin
 from mainapp.models import Product
@@ -27,7 +28,7 @@ class Order(models.Model):
     updated = models.DateTimeField(verbose_name='ОБНОВЛЁН', auto_now=True)
     status = models.CharField(
         choices=ORDER_STATUS_CHOICES, verbose_name='СТАТУС', max_length=1, default=FORMING)
-    is_active = models.BooleanField(verbose_name='АКТИВНЫЙ', default=True)
+    is_active = models.BooleanField(verbose_name='АКТИВНЫЙ', default=True, db_index=True)
 
     class Meta:
         verbose_name_plural = 'ЗАКАЗЫ'
@@ -37,16 +38,24 @@ class Order(models.Model):
     def __str__(self):
         return f'Заказ № {self.id}'
 
+    # @cached_property
     def get_all_products(self):
         return self.orderitems.select_related('product')
 
-    def get_total_quantity(self):
+    def get_general_info(self):
         items = self.get_all_products()
-        return sum(list(map(lambda x: x.quantity, items)))
+        return {
+            'total_quantity': sum(list(map(lambda x: x.quantity, items))),
+            'total_cost': sum(list(map(lambda x: x.get_product_cost(), items)))
+        }
 
-    def get_total_cost(self):
-        items = self.get_all_products()
-        return sum(list(map(lambda x: x.get_product_cost(), items)))
+    # def get_total_quantity(self):
+    #     items = self.get_all_products
+    #     return sum(list(map(lambda x: x.quantity, items)))
+    #
+    # def get_total_cost(self):
+    #     items = self.get_all_products
+    #     return sum(list(map(lambda x: x.get_product_cost(), items)))
 
 
 class OrderItem(ProductQuantityMixin, models.Model):

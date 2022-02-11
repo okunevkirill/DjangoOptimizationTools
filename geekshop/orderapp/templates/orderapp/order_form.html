@@ -1,5 +1,6 @@
 {% extends "orderapp/base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block content %}
         <div class="container" style="margin-top: 70px;">
@@ -38,6 +39,10 @@
                                             <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
                                             {{ field.value }} руб </span>
                                         {% endif %}
+                                    {% elif field.name == 'product' %}
+                                        {% cache 600 orderitemform_product field.value %}
+                                            {{ field }}
+                                        {% endcache %}
                                     {% else %}
                                         {{ field }}
                                     {% endif %}

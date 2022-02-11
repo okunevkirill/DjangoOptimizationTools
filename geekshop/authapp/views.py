@@ -107,5 +107,5 @@ class UserInfo(TitleContextMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['baskets'] = self.request.user.basket.all()
+        context['baskets'] = self.request.user.basket.select_related('product', 'product__category').all()
         return context
