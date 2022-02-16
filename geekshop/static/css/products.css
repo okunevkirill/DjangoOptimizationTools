@@ -1,3 +1,16 @@
 body {
     padding-top: 56px;
 }
+
+.message-add {
+    width: 250px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 20px;
+    background: rgb(40 167 69);
+    position: fixed;
+    top: calc(100vh + 20px);
+    transition-duration: 0.5s;
+}

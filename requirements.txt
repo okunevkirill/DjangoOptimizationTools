@@ -11,6 +11,7 @@ django-extensions==3.1.5
 idna==3.3
 oauthlib==3.1.1
 Pillow==9.0.0
+prettytable==3.1.1
 psycopg2-binary==2.9.3
 pycparser==2.21
 PyJWT==2.3.0
@@ -26,4 +27,5 @@ social-auth-app-django==5.0.0
 social-auth-core==4.2.0
 sqlparse==0.4.2
 urllib3==1.26.8
+wcwidth==0.2.5
 wrapt==1.13.3

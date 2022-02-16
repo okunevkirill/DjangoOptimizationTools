@@ -11,18 +11,31 @@ window.onload = function () {
         event.preventDefault()
     });
 
-    $('.card_add_basket').on('click', 'button[type="button"]', function () {
+    $('.card_add_basket').on('click', 'button[type="button"]', function (event) {
         let t_href = event.target.value
+        const divMsg = document.querySelector('div.message-add');
         $.ajax(
             {
                 url: "/baskets/add/" + t_href + "/",
                 success: function (data) {
                     $('.card_add_basket').html(data.result)
-                    alert('товар добавлен в корзину')
+
+                    // alert('товар добавлен в корзину')
+                    function getHeightMsg(event) {
+                        return event.clientHeight;
+                    }
+
+                    divMsg.style.transform = `translateY(-${180 + getHeightMsg(divMsg)}px)`;
+                    setTimeout(function () {
+                        //ваши действия
+                        divMsg.style.transform = `translateY(-${0}px)`;
+                    }, 800);
+
+
                 },
             });
         event.preventDefault()
-    //
+        //
     })
 
     // var csrf = $('meta[name="csrf-token"]').attr('content');
