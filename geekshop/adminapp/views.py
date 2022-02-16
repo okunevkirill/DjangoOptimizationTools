@@ -42,7 +42,7 @@ class UserUpdateView(AdminAccessOnlyMixin, TitleContextMixin, UpdateView):
 
 
 class UserDeleteView(AdminAccessOnlyMixin, SpecializedRemovalDeleteViewMixin):
-    """Контроллер удаления деактивации пользователя"""
+    """Контроллер удаления пользователя"""
     model = get_user_model()
     template_name = 'adminapp/admin-user-update-delete.html'
     form_class = UserAdminappChangeForm
@@ -82,6 +82,9 @@ class ProductListView(StaffAccessOnlyMixin, TitleContextMixin, ListView):
     model = Product
     title = 'Админка | Обновления категории'
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('category')
+
 
 class ProductsCreateView(StaffAccessOnlyMixin, TitleContextMixin, CreateView):
     model = Product
@@ -110,6 +113,9 @@ class OrderAdminappListView(AdminAccessOnlyMixin, TitleContextMixin, ListView):
     model = Order
     template_name = 'adminapp/admin-order_list.html'
     title = 'Админка | Список заказов'
+
+    def get_queryset(self):
+        return super().get_queryset().select_related()
 
 
 class OrderAdminappDeleteView(AdminAccessOnlyMixin, SpecializedRemovalDeleteViewMixin):

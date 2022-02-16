@@ -1,12 +1,13 @@
 """adminapp namespace url configuration"""
 
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 import adminapp.views as adminapp
 
 app_name = 'adminapp'
 urlpatterns = [
-    path('', adminapp.IndexTemplateView.as_view(), name='index'),
+    path('', cache_page(3600)(adminapp.IndexTemplateView.as_view()), name='index'),
     path('users/', adminapp.UserListView.as_view(), name='users'),
     path('user/create/', adminapp.UserCreateView.as_view(), name='user_create'),
     path('user/<int:pk>/update/', adminapp.UserUpdateView.as_view(), name='user_update'),

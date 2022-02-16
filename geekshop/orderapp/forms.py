@@ -1,5 +1,6 @@
 from django import forms
 
+# from mainapp.mainapp_services import get_all_active_products
 from mainapp.models import Product
 from orderapp.models import Order, OrderItem
 
@@ -19,4 +20,5 @@ class OrderItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # self.fields['product'].queryset = get_all_active_products()
         self.fields['product'].queryset = Product.get_items()

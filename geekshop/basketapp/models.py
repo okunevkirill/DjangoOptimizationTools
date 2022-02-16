@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.functional import cached_property
 
 from mainapp.mixins import ProductQuantityMixin
 from mainapp.models import Product
@@ -20,13 +21,17 @@ class Basket(ProductQuantityMixin, models.Model):
         verbose_name_plural = f'Заказы пользователей'
         verbose_name = 'Заказ'
 
+    @cached_property
+    def get_items_cashed(self):
+        return self.user.basket.select_related('product').all()
+
     def total_product_cost(self):
         return self.product.price * self.quantity
 
     def total_sum(self):  # ToDo - Возможно перенести функционал этого и след. метода в модель пользователя
-        baskets = Basket.objects.filter(user=self.user)
+        baskets = self.get_items_cashed
         return sum(basket.total_product_cost() for basket in baskets)
 
     def total_quantity(self):
-        baskets = Basket.objects.filter(user=self.user)
+        baskets = self.get_items_cashed
         return sum(basket.quantity for basket in baskets)

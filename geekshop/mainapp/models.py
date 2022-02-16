@@ -6,7 +6,7 @@ class ProductCategory(models.Model):
     name = models.CharField(max_length=64, verbose_name='КАТЕГОРИЯ')
     slug = models.SlugField(max_length=64, unique=True, db_index=True, verbose_name='URL')
     description = models.TextField(blank=True, null=True, verbose_name='ОПИСАНИЕ')
-    is_active = models.BooleanField(default=True, verbose_name='АКТИВЕН')
+    is_active = models.BooleanField(default=True, verbose_name='АКТИВЕН', db_index=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -24,7 +24,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='ЦЕНА')
     quantity = models.PositiveSmallIntegerField(default=0, verbose_name='КОЛИЧЕСТВО')
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, verbose_name='КАТЕГОРИЯ')
-    is_active = models.BooleanField(default=True, verbose_name='АКТИВЕН')
+    is_active = models.BooleanField(default=True, verbose_name='АКТИВЕН', db_index=True)
 
     def __str__(self):
         return f'{self.name} | {self.category}'
@@ -39,4 +39,4 @@ class Product(models.Model):
 
     @staticmethod
     def get_items():
-        return Product.objects.filter(is_active=True).order_by('category', 'name')
+        return Product.objects.select_related('category').filter(is_active=True, category__is_active=True)
