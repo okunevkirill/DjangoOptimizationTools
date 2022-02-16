@@ -19,6 +19,7 @@ class Basket(models.Model):
     class Meta:
         verbose_name_plural = f'Заказы пользователей'
         verbose_name = 'Заказ'
+        ordering = ('pk',)
 
     @cached_property
     def get_items_cashed(self):
