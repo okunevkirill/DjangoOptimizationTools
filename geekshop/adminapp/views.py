@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import F
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView
 
@@ -69,6 +70,13 @@ class CategoryUpdateView(StaffAccessOnlyMixin, TitleContextMixin, UpdateView):
     form_class = CategoryAdminappForm
     title = 'Админка | Обновления категории'
     success_url = reverse_lazy('adminapp:categories')
+
+    def form_valid(self, form):
+        discount = form.cleaned_data.get('discount')
+        if discount:
+            self.object.product_set.update(
+                price=F('price') * (1 - discount / 100))
+        return super().form_valid(form)
 
 
 class CategoryDeleteView(StaffAccessOnlyMixin, SpecializedRemovalDeleteViewMixin):

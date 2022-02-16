@@ -39,9 +39,14 @@ class UserAdminappChangeForm(ValidatorUserFormMixin, CssFormMixin, UserChangeFor
 
 # -------------------------------------------------------------------------------
 class CategoryAdminappForm(CssFormMixin, forms.ModelForm):
+    discount = forms.IntegerField(
+        widget=forms.NumberInput(), label='УЦЕНКА', required=False,
+        min_value=0, max_value=90, initial=0
+    )
+
     class Meta:
         model = ProductCategory
-        fields = ('name', 'description')
+        fields = ('name', 'slug', 'description', 'discount')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

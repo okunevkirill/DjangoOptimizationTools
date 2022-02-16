@@ -96,4 +96,5 @@ class ProductQuantityMixin:
     objects = None
 
     def get_product_quantity(self, pk):
+        print(self.__class__)
         return self.__class__.objects.get(pk=pk).quantity
