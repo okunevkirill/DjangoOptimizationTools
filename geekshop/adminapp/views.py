@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import F
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView
 
@@ -70,6 +74,13 @@ class CategoryUpdateView(StaffAccessOnlyMixin, TitleContextMixin, UpdateView):
     title = 'Админка | Обновления категории'
     success_url = reverse_lazy('adminapp:categories')
 
+    def form_valid(self, form):
+        discount = form.cleaned_data.get('discount')
+        if discount:
+            self.object.product_set.update(
+                price=F('price') * (1 - discount / 100))
+        return super().form_valid(form)
+
 
 class CategoryDeleteView(StaffAccessOnlyMixin, SpecializedRemovalDeleteViewMixin):
     model = ProductCategory
@@ -125,4 +136,15 @@ class OrderAdminappDeleteView(AdminAccessOnlyMixin, SpecializedRemovalDeleteView
 
 @user_passes_test(lambda u: u.is_superuser)
 def order_edit(request, id_order, status):
-    print(f'[*] Обращение для изменения заказа № {id_order} в состояние {status}')
+    if request.accepts('text/html'):
+        order = get_object_or_404(Order, id=id_order)
+        if status != Order.CANCEL:
+            order.status = status
+            order.save()
+        else:
+            order.delete()
+        orders = Order.objects.all().order_by('pk')
+        context = {'object_list': orders}
+        result = render_to_string('adminapp/includes/inc__table_orders.html', context)
+        result_response = JsonResponse({'result': result})
+        return result_response

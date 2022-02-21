@@ -1,8 +1,7 @@
 import django.contrib.auth
 from django.db import models
-# from django.utils.functional import cached_property
+from django.utils.functional import cached_property
 
-from mainapp.mixins import ProductQuantityMixin
 from mainapp.models import Product
 
 
@@ -38,30 +37,27 @@ class Order(models.Model):
     def __str__(self):
         return f'Заказ № {self.id}'
 
-    # @cached_property
+    @cached_property
     def get_all_products(self):
         return self.orderitems.select_related('product')
 
-    def get_general_info(self):
-        items = self.get_all_products()
-        return {
-            'total_quantity': sum(list(map(lambda x: x.quantity, items))),
-            'total_cost': sum(list(map(lambda x: x.get_product_cost(), items)))
-        }
+    def get_total_quantity(self):
+        items = self.get_all_products
+        return sum(list(map(lambda x: x.quantity, items)))
 
-    # def get_total_quantity(self):
-    #     items = self.get_all_products
-    #     return sum(list(map(lambda x: x.quantity, items)))
-    #
-    # def get_total_cost(self):
-    #     items = self.get_all_products
-    #     return sum(list(map(lambda x: x.get_product_cost(), items)))
+    def get_total_cost(self):
+        items = self.get_all_products
+        return sum(list(map(lambda x: x.get_product_cost(), items)))
 
 
-class OrderItem(ProductQuantityMixin, models.Model):
+class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='ЗАКАЗ', on_delete=models.CASCADE, related_name='orderitems')
     product = models.ForeignKey(Product, verbose_name='ПРОДУКТЫ', on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(verbose_name='КОЛИЧЕСТВО', default=0)
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_item(pk):
+        return OrderItem.objects.get(pk=pk).quantity

@@ -6,6 +6,18 @@
         <div class="container-fluid">
             <h1 class="mt-4">Редактирование категории | {{ productcategory.name }}  </h1>
             <div class="card-body">
+                <div>
+                    {% if form.errors %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                             style="margin-top: 50px;">
+                            {{ form.errors }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+
                 <form action="{% url 'adminapp:category_update' productcategory.id %}" method="post">
 
                     {% csrf_token %}
@@ -20,8 +32,26 @@
                     <div class="form-row">
                         <div class="col-lg-6">
                             <div class="form-group">
+                                <label class="small mb-1" for="{{ form.slug.id_for_label }}">Slug</label>
+                                {{ form.slug }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
                                 <label class="small mb-1" for="{{ form.description.id_for_label }}">Описание</label>
                                 {{ form.description }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="{{ form.discount.id_for_label }}">Уценка товаров в
+                                    категории</label>
+                                {{ form.discount }}
                             </div>
                         </div>
                     </div>

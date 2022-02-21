@@ -2,7 +2,6 @@
     <div class="h2">Заказ №{{ object.pk }} от {{ object.created|date:"Y-m-d H:i:s" }}</div>
     <hr>
 
-    {% with object_summary=object.get_general_info %}
         <div class="h4">
             Заказчик:
             {% if user.last_name or user.first_name %}
@@ -15,12 +14,11 @@
         <div class="h4">Статус: {{ object.get_status_display }}</div>
         <hr>
         <div class="h4">
-            Общее количество товаров: <span class="order_total_quantity">{{ object_summary.total_quantity }}</span>
+            Общее количество товаров: <span class="order_total_quantity">{{ object.get_total_quantity }}</span>
         </div>
         <div class="h3">
-            Общая стоимость: <span class="order_total_cost">{{ object_summary.total_cost }}</span> руб
+            Общая стоимость: <span class="order_total_cost">{{ object.get_total_cost }}</span> руб
         </div>
-    {% endwith %}
 {% else %}
     <div class="h2">Новый заказ</div>
     <hr>

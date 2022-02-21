@@ -2,11 +2,10 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.functional import cached_property
 
-from mainapp.mixins import ProductQuantityMixin
 from mainapp.models import Product
 
 
-class Basket(ProductQuantityMixin, models.Model):
+class Basket(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name='basket',
                              verbose_name='ПОЛЬЗОВАТЕЛЬ')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='ТОВАР')
@@ -20,6 +19,7 @@ class Basket(ProductQuantityMixin, models.Model):
     class Meta:
         verbose_name_plural = f'Заказы пользователей'
         verbose_name = 'Заказ'
+        ordering = ('pk',)
 
     @cached_property
     def get_items_cashed(self):
@@ -35,3 +35,7 @@ class Basket(ProductQuantityMixin, models.Model):
     def total_quantity(self):
         baskets = self.get_items_cashed
         return sum(basket.quantity for basket in baskets)
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk).quantity

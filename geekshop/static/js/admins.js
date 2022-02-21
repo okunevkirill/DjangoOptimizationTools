@@ -9,10 +9,11 @@ window.onload = function () {
 
     $('.orders_list').on('change', 'select', function (event) {
         let item = event.target
-        $.ajax(
+        $.post(
             {
                 url: "/admins/order/" + item.name + "/" + "edit/" + item.value + "/",
-                data: 'csrfmiddlewaretoken={{csrf_token}}',
+                // type: "POST",
+                // data: 'csrfmiddlewaretoken={{csrf_token}}',
                 success: function (data) {
                     $('.orders_list').html(data.result)
                 },
